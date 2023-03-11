@@ -1,6 +1,10 @@
 package com.sgbd2neo4j;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+
+
 
 public class App 
 {
@@ -16,11 +20,18 @@ public class App
         
 
         ResultSet primarykey = db.getPrimaryKey(DB,"customers");
+        
         ResultSet foreignkey = db.getForeignKey(DB, "employees");
-        db.toString(foreignkey);
 
 
+        HashMap<String,List<String>> test = db.getListAllPK(DB);
 
+        for(int i= 0; i<test.size();i++){
+            System.out.println(test.get("customers"));
+
+        }
+
+       
 
 
 

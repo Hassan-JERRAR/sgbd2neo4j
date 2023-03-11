@@ -4,13 +4,18 @@ package com.sgbd2neo4j;
 
 // Importing database
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Database {
 
+    // Connection class object
+	Connection con = null;
+
     public Connection connDB(String url){
 
-		// Connection class object
-		Connection con = null;
+		
 
 		// Try block to check for exceptions
 		try {
@@ -20,7 +25,7 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			// Reference to connection interface
-			con = DriverManager.getConnection(url);
+			this.con = DriverManager.getConnection(url);
             System.out.println("Connection Established");
         }
 		// Catch block to handle exceptions
@@ -29,7 +34,7 @@ public class Database {
 			System.err.println(ex);
             System.out.println("Connection Failed");
 		}
-        return con;
+        return this.con;
 	}
 
     public void closeDB(Connection DB) throws SQLException{
@@ -51,7 +56,7 @@ public class Database {
     }
 
     public ResultSet getTable(Connection DB) throws SQLException{
-        String query = "show tables;";
+        String query = "show full tables where Table_type = 'BASE TABLE';";
         Statement stmt = DB.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
@@ -75,14 +80,14 @@ public class Database {
     }
 
     public ResultSet getPrimaryKey(Connection db, String table) throws SQLException{
-        String query = "SELECT * FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraint_name = 'PRIMARY'";
+        String query = "SELECT TABLE_NAME,COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraint_name = 'PRIMARY'";
         Statement stmt = db.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
 
     public ResultSet getForeignKey(Connection db, String table) throws SQLException{
-        String query = "SELECT * FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraint_name LIKE 'FK_%'";
+        String query = "SELECT TABLE_NAME,COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraint_name LIKE 'FK_%'";
         Statement stmt = db.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
@@ -94,5 +99,30 @@ public class Database {
         Statement stmt = db.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
+    }
+
+    public HashMap<String,List<String>> getListAllPK (Connection db) throws SQLException{
+        HashMap<String, List<String>> pk = new HashMap<String,List<String>>();
+        ResultSet table = this.getTable(db);
+        while(table.next()){
+            String tableName = table.getString(1);
+            ResultSet primarykey = this.getPrimaryKey(db, tableName);
+            while(primarykey.next()){
+                if(pk.containsKey(tableName)){
+                    List<String> list = pk.get(tableName);
+                    list.add(primarykey.getString(2));
+                    pk.put(tableName, list);
+                    System.out.println(pk.get(tableName));
+                }
+                else{
+                    List<String> list = new ArrayList<String>();
+                    list.add(primarykey.getString(2));
+                    pk.put(tableName, list);
+                    System.out.println(pk.get(tableName));
+                }
+            }
+        }
+
+        return pk;
     }
 }

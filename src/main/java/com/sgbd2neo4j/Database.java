@@ -125,4 +125,31 @@ public class Database {
 
         return pk;
     }
+
+    public HashMap<String,List<String>> getListAllFK (Connection db) throws SQLException{
+        HashMap<String, List<String>> fk = new HashMap<String,List<String>>();
+        ResultSet table = this.getTable(db);
+        while(table.next()){
+            String tableName = table.getString(1);
+            ResultSet foreignkey = this.getForeignKey(db, tableName);
+            while(foreignkey.next()){
+                if(fk.containsKey(tableName)){
+                    List<String> list = fk.get(tableName);
+                    list.add(foreignkey.getString(2));
+                    fk.put(tableName, list);
+                    System.out.println(fk.get(tableName));
+                }
+                else{
+                    List<String> list = new ArrayList<String>();
+                    list.add(foreignkey.getString(2));
+                    fk.put(tableName, list);
+                    System.out.println(fk.get(tableName));
+                }
+            }
+        }
+
+        return fk;
+    }
+
+
 }

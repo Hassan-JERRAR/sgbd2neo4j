@@ -112,13 +112,13 @@ public class Database {
                     List<String> list = pk.get(tableName);
                     list.add(primarykey.getString(2));
                     pk.put(tableName, list);
-                    System.out.println(pk.get(tableName));
+                    //System.out.println(pk.get(tableName));
                 }
                 else{
                     List<String> list = new ArrayList<String>();
                     list.add(primarykey.getString(2));
                     pk.put(tableName, list);
-                    System.out.println(pk.get(tableName));
+                    //System.out.println(pk.get(tableName));
                 }
             }
         }
@@ -137,19 +137,44 @@ public class Database {
                     List<String> list = fk.get(tableName);
                     list.add(foreignkey.getString(2));
                     fk.put(tableName, list);
-                    System.out.println(fk.get(tableName));
+                    //System.out.println(fk.get(tableName));
                 }
                 else{
                     List<String> list = new ArrayList<String>();
                     list.add(foreignkey.getString(2));
                     fk.put(tableName, list);
-                    System.out.println(fk.get(tableName));
+                    //System.out.println(fk.get(tableName));
                 }
             }
         }
-
         return fk;
     }
 
+    public List<String> toList(ResultSet query) throws SQLException {
+        List<String> list = new ArrayList<String>();
+        while(query.next()){
+            list.add(query.getString(1));
+        }
+        return list;
+    }
 
+    public ResultSet getColumnName (Connection db, String table) throws SQLException{
+        String query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = '" + table + "'";
+        Statement stmt = db.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        return rs;
+    }
+
+    public String[] toStringList(ResultSet tuple) throws SQLException{
+        String[] list = new String[tuple.getMetaData().getColumnCount()];
+        for(int i = 0; i < tuple.getMetaData().getColumnCount(); i++){
+            if (tuple.getString(i+1).matches("'")){
+                list[i] = tuple.getString(i+1).replace("'", "\\'");
+            }
+            else
+                list[i] = tuple.getString(i+1);
+        }
+
+        return list;
+    }
 }

@@ -1,29 +1,39 @@
 package com.sgbd2neo4j;
 
+import java.util.List;
+
 public class Cypher {
     
     // Requete cypher pour créer un noeud
-    public static String createNode(String label, String name){
-        String query = "CREATE (:" + label + " {name: '" + name + "'})";
+    public static String createNode(String label, String nomColonne, String name){
+        String query = "CREATE (:" + label + " { " + nomColonne + ": '" + name + "'})";
         return query;
     }
 
     // Requete cypher pour créer un noeud avec une propriété
     public static String createNode(String label, String name, String property, String value){
-        String query = "CREATE (:" + label + " {name: '" + name + "', " + property + ": '" + value + "'})";
+        String query = "CREATE (:" + label + " { name: '" + name + "', " + property + ": '" + value + "'})";
         return query;
     }
 
     // Requete cypher pour créer un noeud avec plusieurs propriétés
-    public static String createNode(String label, String name, String[] property, String[] value){
-        String query = "CREATE (:" + label + " {name: '" + name + "', ";
-        for(int i = 0; i < property.length; i++){
-            query += property[i] + ": '" + value[i] + "'";
-            if(i != property.length - 1){
+    public static String createNode(String label, List<String> nomColonne, String[] value){
+        if(label.contains(" ")){
+            label = label.replace(" ", "_");
+        }
+        String query = "CREATE (:" + label + " { ";
+        for(int i = 0; i < nomColonne.size(); i++){
+            if( value[i] != null){
+                if (value[i].contains("\"")){
+                    value[i] = value[i].replace("\"", "\\\"");
+                }    
+            }       
+            query += nomColonne.get(i) + ": \"" + value[i] + "\"";
+            if(i != nomColonne.size() - 1){
                 query += ", ";
             }
         }
-        query += "})";
+        query += " })";
         return query;
     }
 

@@ -1,1 +1,46 @@
 *.sql
+*.vscode
+# Fichiers et dossiers créés par Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Fichiers et dossiers créés par les IDE
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.classpath
+/.project
+/.settings/
+*.launch
+*.prefs
+
+# Fichiers temporaires et de sauvegarde
+*~
+*.bak
+*.swp
+*.swo
+*.tmp
+*.rej
+*.orig
+*.old
+*.log
+
+# Fichiers générés
+/bin/
+/gen/
+
+# Fichiers de configuration spécifiques à l'utilisateur (par exemple, les fichiers contenant des mots de passe)
+config.properties
+*.jks
+
+# Autres fichiers à ignorer
+.DS_Store
+Thumbs.db

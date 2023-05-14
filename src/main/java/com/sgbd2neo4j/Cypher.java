@@ -36,6 +36,39 @@ public class Cypher {
         query += " })";
         return query;
     }
+    
+    // Requete cypher pour créer un noeud avec plusieurs propriétés
+    public static String createNode(String label, List<String> nomsColonnes, String[] valeursString, Integer[] valeursInt){
+        if(label.contains(" ")){
+            label = label.replace(" ", "_");
+        }
+        String query = "CREATE (:" + label + " { ";
+        for(int i = 0; i < nomsColonnes.size() ; i++){
+            
+            // On ajoute toutes les valeurs String 
+            if(valeursString.length > i) {
+              if( valeursString[i] != null){
+                if (valeursString[i].contains("\"")){
+                  valeursString[i] = valeursString[i].replace("\"", "\\\"");
+                }    
+              }       
+              query += nomsColonnes.get(i) + ": \"" + valeursString[i] + "\"";
+              if(i != nomsColonnes.size() - 1){
+                  query += ", ";
+              }
+            } else {
+              // Ensuite on ajoute les valeurs Int 
+              int j = i - valeursString.length;
+              query += nomsColonnes.get(i) + ": " + valeursInt[j];
+              if(i != nomsColonnes.size() - 1){
+                  query += ", ";
+              }
+            }
+            
+        }
+        query += " })";
+        return query;
+    }
 
     // Requete cypher pour créer un lien entre deux noeuds
     public static String createLink(String label1, String name1, String label2, String name2, String link){

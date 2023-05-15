@@ -155,10 +155,24 @@ public class App
               // On affiche la liste des tables référencées
               afficherTableRefParFK(nomAssociation, tablesPointeesParFk);
               
+              // On fait un hashmap qui récupère toutes les PK de chaque table
+              HashMap<String,List<String>> listePK = new HashMap<String,List<String>>();
+              listePK = db.getAllPK(DB, App.list);
+              
+              // Faire hashmap entre tablesPointeesParFk et listePK
+              // Cle : Nom de la table (qui est referencées par l'association)
+              // Valeur : Liste des PK de cette table (qui sont possiblement pointées par l'association)
+              HashMap<String, List<String>> hm = new HashMap<String,List<String>>();
+              for(String nomTable : tablesPointeesParFk) {
+                    List<String> list = new ArrayList<String>();
+                    list = listePK.get(nomTable);
+                    hm.put(nomTable, list);
+              }
+              
               // Faire hashmap entre tablesPointeesParFk et listeFkTable
               // Cle : Nom des tables referencées par l'association
-              // Valeur : Liste des attributs de l'association qui référence la table (=clé de hm)
-              HashMap<String, List<String>> hm = new HashMap<String,List<String>>();
+              // Valeur : Liste des attributs de l'association qui référence la table (=clé de hm2)
+              HashMap<String, List<String>> hm2 = new HashMap<String,List<String>>();
               for(String nomTable : tablesPointeesParFk) {
                     List<String> list = new ArrayList<String>();
                     for(int i = 0 ; i < listeFkTable.size() ; i ++) {
@@ -166,7 +180,7 @@ public class App
                         list.add(listeFkTable.get(i));
                       }
                     }
-                    hm.put(nomTable, list);
+                    hm2.put(nomTable, list);
               }
               
               // Afficher le HashMap
@@ -174,7 +188,7 @@ public class App
               
               // Creer les relations
               ResultSet rs = db.getTuple(DB, nomAssociation);
-              app.createLinks(rs, hm, nomAssociation);
+              app.createLinks(rs, hm, nomAssociation, hm2);
             }
         }
     }

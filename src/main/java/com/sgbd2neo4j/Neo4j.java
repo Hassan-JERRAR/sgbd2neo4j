@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -90,9 +91,18 @@ public class Neo4j implements AutoCloseable {
                 
              }
             
-            String query = Cypher.createNode(nomTable, listeColonnes, valeursString, valeursInt);
+            // On réarrange listeColonne pour avoir en premier les string et ensuite les int
+            ArrayList<String> listeColonnesOrdonnees = new ArrayList<String>();
+            for(int i = 0 ; i < nbString.length ; i++) {
+              listeColonnesOrdonnees.add(listeColonnes.get(nbString[i] - 1));
+            }
+            for(int i = 0 ; i < nbInt.length ; i++) {
+              listeColonnesOrdonnees.add(listeColonnes.get(nbInt[i] - 1));
+            }
+            
+            String query = Cypher.createNode(nomTable, listeColonnesOrdonnees, valeursString, valeursInt);
             System.out.println(query);
-            // this.execute(this.driver, query);
+            this.execute(this.driver, query);
         }
         
         System.out.println("Fin Neo4j.createNode");
@@ -103,9 +113,73 @@ public class Neo4j implements AutoCloseable {
     }
     
     
+    public void createLinks(ResultSet rs, HashMap<String, List<String>> hm, String nomAssociation, HashMap<String, List<String>> hm2) throws Exception{
+      
+      // Déclarations des ArrayList contenant les attributs du noeud1, du noeud2 et de la relation
+      ArrayList<String> attributs1 = new ArrayList<String>();
+      ArrayList<String> attributs2 = new ArrayList<String>();
+      ArrayList<String> attributs3 = new ArrayList<String>();
+      
+      
+      String label1 = null;
+      String label2 = null;
+      
+      // On récupère les tables référencées et les attributs qui les pointent 
+      // à partir du hashmap
+      for (String key : hm.keySet()) {
+        if(label1 == null ) {
+          label1 = key;
+          attributs1 = (ArrayList<String>) hm.get(key);
+        } else {
+          label2 = key;
+          attributs2 = (ArrayList<String>) hm.get(key);
+        }
+      }
+      
+      int nbPK = attributs1.size() + attributs2.size();
+      //
+      ArrayList<String> valeurs[] = new ArrayList[nbPK];
+      for(int i = 0 ; i < nbPK ; i++) 
+          valeurs[i] = new ArrayList<String>();
+      
+      int index = 0;
+      for (String key : hm2.keySet()) {
+        for(String attr : hm2.get(key)) {
+          valeurs[index] = 
+          index++;
+        }
+      }
+      
+      // On récupère et migre les données de la table d'associations 1..N 1..N
+      while(rs.next()){    
+        
+        // Déclarations des ArrayList contenant les valeurs des attributs
+        ArrayList<String> valeurs1 = new ArrayList<String>();
+        ArrayList<String> valeurs2 = new ArrayList<String>();
+        ArrayList<String> valeurs3 = new ArrayList<String>();
+        
+        
+        if (rs.getObject(1) != null){
+          
+            //On récupère toutes les valeurs de chaque colonne sous la forme d'un String
+            for(int i = 1 ; i <= nbPK ; i++) {                 
+                    
+             }
+        }
+        
+        // On écrit la requête créant la relation
+        String query = Cypher.createLink(label1,   attributs1, valeurs1, 
+                                         label2,   attributs2, valeurs2,
+                                         nomAssociation, attributs3, valeurs3);
+        System.out.println(query);
+        this.execute(this.driver, query);
+      }
+    }
     
     
     
+    
+    /*
     public void createLinks(ResultSet rs, HashMap<String, List<String>> hm, String nomAssociation) throws Exception{
 
       System.out.println("---------------------------------------------");
@@ -160,7 +234,7 @@ public class Neo4j implements AutoCloseable {
       System.out.println("---------------------------------------------");
       System.out.println("");
   }
-    
+   */
     
     
     

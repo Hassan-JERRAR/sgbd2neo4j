@@ -39,10 +39,10 @@ public class App
              afficherRecuperationDonnees();
              
              // On traduit toutes les tables en noeuds puis on les migre vers Neo4J
-             migrationTables(app);
+             // migrationTables(app);
              
              // On détermine les FK pour afin de définir les relations entre noeuds
-             // definirRelation(app);
+             definirRelation(app);
         }
        
         db.closeDB(DB);
@@ -116,9 +116,7 @@ public class App
         
         // On crée les relations entre les noeuds pour chacune des tables d'associations
         for(String nomAssociation : nomsTablesAssociation) {
-          if(nomAssociation.equals("notea")) {
             creerAssociation(nomAssociation, listeFK, app);
-          }
         }
         
     }

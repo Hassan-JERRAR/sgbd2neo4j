@@ -1,4 +1,4 @@
-*.sql
+
 *.vscode
 # Fichiers et dossiers créés par Maven
 target/

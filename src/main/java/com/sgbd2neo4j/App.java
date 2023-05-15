@@ -12,11 +12,16 @@ import org.neo4j.driver.Config;
 public class App 
 {  
     //Aura queries use an encrypted connection using the "neo4j+s" protocol
-    final private static String url = "jdbc:mysql://localhost:3306/northwind?user=root&password=Hj11062000!!";
-    final private static String uri = "neo4j+s://43837302.databases.neo4j.io:7687";
-    final private static String user = "neo4j";
-    final private static String password = "zU5cPEHkdhQgHzlLx85OfqlbYBMbNyxv1XIDOfxmzxA";
+    // final private static String url = "jdbc:mysql://localhost:3306/northwind?user=root&password=Hj11062000!!";
+    // final private static String uri = "neo4j+s://43837302.databases.neo4j.io:7687";
+    // final private static String user = "neo4j";
+    // final private static String password = "zU5cPEHkdhQgHzlLx85OfqlbYBMbNyxv1XIDOfxmzxA";
     
+    final private static String url = "jdbc:mysql://localhost:3306/northwind?user=root&password=";
+    final private static String uri = "neo4j+s://02187017.databases.neo4j.io";
+    final private static String user = "neo4j";
+    final private static String password = "OhnI7joX34j4EPzZmMHljCE6js4UG82yHJy4j9y9K2E";
+  
     static private Database db;
     static private Connection DB;
     static private ResultSet table;
@@ -39,12 +44,12 @@ public class App
              afficherRecuperationDonnees();
              
              // On traduit toutes les tables en noeuds puis on les migre vers Neo4J
-             //migrationTables(app);
+             migrationTables(app);
 
 
              
              // On détermine les FK pour afin de définir les relations entre noeuds
-             //definirRelation(app);
+             // definirRelation(app);
         }
 
         ResultSet test = db.getForeignKey(DB, "products");
@@ -111,15 +116,18 @@ public class App
         
         // On récupère toutes les PK et toutes les FK de la BDD dans un Hashmap
         HashMap<String,List<String>> listePK = db.getAllPK(DB, list);
-        HashMap<String,List<String>> listeFK = db.getAllPK(DB, list);
-        listeFK = modifier(listeFK);
+        HashMap<String,List<String>> listeFK = db.getAllFK(DB, list);
+        // listeFK = modifier(listeFK);
         
         afficherKey(listePK, "PK");
         afficherKey(listeFK, "FK");
         
+        
         // On récupère uniquement le nom des tables d'associations (cardinalité 1..N et 1..N dans le schéma E/A)
         ArrayList<String> nomsTablesAssociation = tablesAssociations(listeFK, listePK);
         afficherTableAssociation(nomsTablesAssociation);
+        
+        System.exit(0);
         
         // On crée les relations entre les noeuds pour chacune des tables d'associations
         for(String nomAssociation : nomsTablesAssociation) {

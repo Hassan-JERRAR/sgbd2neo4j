@@ -81,7 +81,12 @@ public class Neo4j implements AutoCloseable {
                       valeursString[indexString] = (String) rs.getObject(i);
                       indexString++;
                     } else if(contains(nbInt, i)) {
-                      valeursInt[indexInt] = (Integer) rs.getObject(i);
+                      java.math.BigDecimal bigDecimal = new java.math.BigDecimal("1234");
+                      if(rs.getObject(i).getClass() == bigDecimal.getClass()) {
+                        valeursInt[indexInt] = ((java.math.BigDecimal) rs.getObject(i)).intValue();
+                      } else {
+                        valeursInt[indexInt] = (Integer) rs.getObject(i);
+                      }
                       indexInt++;
                     }
                   } else {

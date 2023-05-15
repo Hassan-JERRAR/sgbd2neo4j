@@ -217,8 +217,6 @@ public class Database {
     public HashMap<String,List<String>> getAllFK (Connection db, List<String> listeTables) throws SQLException {
       
         HashMap<String,List<String>> listeFK = getListAllFK(db);
-      
-       
           
         return listeFK;
     }
@@ -230,7 +228,6 @@ public class Database {
             String tableName = table.getString(1);
             ResultSet foreignkey = this.getForeignKey(db, tableName);
             while(foreignkey.next()){
-              
                 if(fk.containsKey(tableName)){
                     List<String> list = fk.get(tableName);
                     list.add(foreignkey.getString(1));

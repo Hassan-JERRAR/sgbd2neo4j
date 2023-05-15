@@ -44,7 +44,7 @@ public class App
              //afficherRecuperationDonnees();
              
              // On traduit toutes les tables en noeuds puis on les migre vers Neo4J
-             migrationTables(app);
+             //migrationTables(app);
 
              Cypher cypher = new Cypher();
 
@@ -67,8 +67,8 @@ public class App
                     System.out.println("La table " + string + " a une FK : " + list2.get(0) + " qui référence la table " + tableref.get(0));
                     app.executeCreateSingleLink(string, tableref.get(0),list2.get(0),columnref.get(0),list2.get(0)); 
                 
-                }
-                else if (list2.size() > 2) {
+                } 
+                else if (list2.size()>2){
                   System.out.println("La table " + string + " a plusieurs FK : " + list2);
                   for (int i = 0; i < list2.size(); i++) {
                     ResultSet ref = db.getReferenceTableFk(DB, string, list2.get(i));
@@ -76,10 +76,24 @@ public class App
                     ResultSet refcolumn = db.getReferenceColumnFk(DB, string, list2.get(i));
                     List<String> columnref = db.toList(refcolumn);
                     System.out.println("La table " + string + " a une FK : " + list2.get(i) + " qui référence la table " + tableref.get(0));
-                    app.executeCreateSingleLink(string, tableref.get(0),list2.get(i),columnref.get(0),list2.get(i)); 
-                  }
+                    app.executeCreateSingleLink(string, tableref.get(0),list2.get(i),columnref.get(0),list2.get(i)); }
+
+                  
+                } /*else if (list2.size()>2){
+                  System.out.println("La table " + string + " a plusieurs FK : " + list2);
+                  for (int i = 0; i < list2.size(); i++) {
+                    ResultSet ref = db.getReferenceTableFk(DB, string, list2.get(i));
+                    List<String> tableref = db.toList(ref);
+                    ResultSet refcolumn = db.getReferenceColumnFk(DB, string, list2.get(i));
+                    List<String> columnref = db.toList(refcolumn);
+                    System.out.println("La table " + string + " a une FK : " + list2.get(i) + " qui référence la table " + tableref.get(0));
+                    app.executeCreateSingleLink(string, tableref.get(0),list2.get(i),columnref.get(0),list2.get(i)); }
+
+                }*/
+                
+
                     
-                } 
+                
                 
             }
 

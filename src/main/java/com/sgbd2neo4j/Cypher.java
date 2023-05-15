@@ -71,6 +71,8 @@ public class Cypher {
         return query;
     }
 
+
+
      // Requete cypher pour créer un lien entre deux noeuds
      public static String createSingleLink(String label1, String label2, String fk1,  String fk2, String link){
         String query = "MATCH (a:" + label1 + "),(b:" + label2 + ") WHERE a."+fk1+" = b."+fk2+"  CREATE (a)-[:" + link + "]->(b)";
@@ -138,7 +140,11 @@ public class Cypher {
         return query;
     }
     
-
+    // Requete cypher pour supprimer un label
+    public static String deleteLabel(String label){
+        String query = "MATCH (n:" + label + ") DETACH DELETE n";
+        return query;
+    }
 
     // Requete cypher pour supprimer un noeud
     public static String deleteNode(String label, String name){

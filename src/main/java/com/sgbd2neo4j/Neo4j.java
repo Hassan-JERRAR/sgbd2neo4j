@@ -313,4 +313,9 @@ public class Neo4j implements AutoCloseable {
       String query = Cypher.createSingleLink(label1, label2, fk1, fk2, link);
       this.execute(this.driver, query);
     }
+
+    public void executedDeleteLabel(String label){
+      String query = Cypher.deleteLabel(label);
+      this.execute(this.driver, query);
+    }
 }

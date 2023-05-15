@@ -84,9 +84,18 @@ public class Neo4j implements AutoCloseable {
                       java.math.BigDecimal bigDecimal = new java.math.BigDecimal("1234");
                       if(rs.getObject(i).getClass() == bigDecimal.getClass()) {
                         valeursInt[indexInt] = ((java.math.BigDecimal) rs.getObject(i)).intValue();
+                      } else if (rs.getObject(i).getClass() == Integer.class){
+                        valeursInt[indexInt] = (Integer) rs.getObject(i) ;
+                      } else if (rs.getObject(i).getClass() == Float.class){
+                        valeursInt[indexInt] = ((Float) rs.getObject(i)).intValue() ;
+                      } else if (rs.getObject(i).getClass() == Double.class){
+                        valeursInt[indexInt] = ((Double) rs.getObject(i)).intValue() ;
+                      } else if (rs.getObject(i).getClass() == Long.class){
+                        valeursInt[indexInt] = ((Long) rs.getObject(i)).intValue() ;
                       } else {
-                        valeursInt[indexInt] = (Integer) rs.getObject(i);
+                        System.out.println("Type non pris en compte : " + rs.getObject(i).getClass());
                       }
+
                       indexInt++;
                     }
                   } else {
@@ -298,5 +307,10 @@ public class Neo4j implements AutoCloseable {
         }
       }
       return false;
+    }
+
+    public void executeCreateSingleLink(String label1, String label2, String fk1,  String fk2, String link){
+      String query = Cypher.createSingleLink(label1, label2, fk1, fk2, link);
+      this.execute(this.driver, query);
     }
 }

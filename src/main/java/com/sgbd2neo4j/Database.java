@@ -44,6 +44,14 @@ public class Database {
         DB.close();
     }
 
+    /*
+     * Renvoie les tuples d'une table
+     * @param DB La connection
+     * @param table Le nom de la table
+     * @return Les tuples de la table
+     * @throws SQLException
+     * 
+     */
     public ResultSet getTuple(Connection DB, String table ) throws SQLException{
         String query = "SELECT * FROM " + table;
         Statement stmt = DB.createStatement();
@@ -51,6 +59,13 @@ public class Database {
         return rs;
     }
 
+    /*
+     * Renvoie les Metadonnees d'une table
+     * @param DB La connection
+     * @return Les Metadonnees de la table
+     * @throws SQLException
+     * 
+     */
     public ResultSet getMetaTable(Connection DB) throws SQLException{
         String query = "SELECT * FROM information_schema.tables";
         Statement stmt = DB.createStatement();
@@ -58,6 +73,14 @@ public class Database {
         return rs;
     }
 
+
+    /*
+     * Renvoie les Tables d'une base de donnees
+     * @param DB La connection
+     * @return Les Tables de la base de donnees
+     * @throws SQLException
+     * 
+     */
     public ResultSet getTable(Connection DB) throws SQLException{
         String query = "show full tables where Table_type = 'BASE TABLE';";
         Statement stmt = DB.createStatement();
@@ -65,6 +88,12 @@ public class Database {
         return rs;
     }
 
+    /*
+     * Affiche un ResultSet 
+     * @param query Le ResultSet
+     * @throws SQLException
+     * 
+     */
     public void toString(ResultSet query) throws SQLException {
         ResultSetMetaData rsmd = query.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
@@ -82,6 +111,14 @@ public class Database {
         }
     }
 
+    /*
+     * Renvoie les clés primaires d'une table
+     * @param db La connection
+     * @param table Le nom de la table
+     * @return Les clés primaires de la table
+     * @throws SQLException
+     * 
+     */
     public ResultSet getPrimaryKey(Connection db, String table) throws SQLException{
         String query = "SELECT COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraint_name = 'PRIMARY'";
         Statement stmt = db.createStatement();
@@ -89,6 +126,14 @@ public class Database {
         return rs;
     }
 
+    /*
+     * Renvoie les clés étrangères d'une table
+     * @param db La connection
+     * @param table Le nom de la table
+     * @return Les clés étrangères de la table
+     * @throws SQLException
+     * 
+     */
     public ResultSet getForeignKey(Connection db, String table) throws SQLException{
       String query = "SELECT COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' and constraint_name <> 'PRIMARY'";
       Statement stmt = db.createStatement();
@@ -116,6 +161,14 @@ public class Database {
 
     }
 
+    /*
+     * Renvoie les contraintes d'une table
+     * @param db La connection
+     * @param table Le nom de la table
+     * @return Les contraintes de la table
+     * @throws SQLException
+     * 
+     */
     public ResultSet getConstraint(Connection db, String table) throws SQLException{
         String query = "SELECT * FROM information_schema.table_constraints WHERE table_name = '" + table + "'";
         Statement stmt = db.createStatement();
@@ -123,6 +176,13 @@ public class Database {
         return rs;
     }
 
+    /*
+     * Renvoie une HashMap avec en clé le nom de la table et en valeur la liste des clés primaires
+     * @param db La connection
+     * @return La HashMap
+     * @throws SQLException
+     * 
+     */
     public HashMap<String,List<String>> getListAllPK (Connection db) throws SQLException{
         HashMap<String, List<String>> pk = new HashMap<String,List<String>>();
         ResultSet table = this.getTable(db);
@@ -247,7 +307,6 @@ public class Database {
         List<String> list = new ArrayList<String>();
         while(query.next()){
             list.add(query.getString(1));
-            System.out.println(query.getString(1));
         }
         return list;
     }
@@ -267,12 +326,21 @@ public class Database {
       return list;
   }
 
+    /*
+    * Renvoie le nom des colonnes d'une table
+    * @param db La connection
+    * @param table Le nom de la table
+    * @return Le ResultSet contenant le nom des colonnes
+    * @throws SQLException
+    *
+     */
     public ResultSet getColumnName (Connection db, String table) throws SQLException{
         String query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = '" + table + "'";
         Statement stmt = db.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
+
 
     public String[] toStringList(ResultSet tuple) throws SQLException{
         String[] list = new String[tuple.getMetaData().getColumnCount()];
@@ -310,4 +378,20 @@ public class Database {
         
         return tablesReferencees;
     }
+
+    public ResultSet getReferenceTableFk (Connection db, String table, String fk) throws SQLException{
+        String query = "SELECT REFERENCED_TABLE_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE table_name = '" + table + "' AND column_name = '" + fk + "'";
+        Statement stmt = db.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        return rs;
+    }
+
+    public ResultSet getReferenceColumnFk (Connection db, String table, String fk) throws SQLException{
+        String query = "SELECT REFERENCED_COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE table_name = '" + table + "' AND column_name = '" + fk + "'";
+        Statement stmt = db.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        return rs;
+    }
+
+    
 }

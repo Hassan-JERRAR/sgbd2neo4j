@@ -71,6 +71,12 @@ public class Cypher {
         return query;
     }
 
+     // Requete cypher pour créer un lien entre deux noeuds
+     public static String createSingleLink(String label1, String label2, String fk1,  String fk2, String link){
+        String query = "MATCH (a:" + label1 + "),(b:" + label2 + ") WHERE a."+fk1+" = b."+fk2+"  CREATE (a)-[:" + link + "]->(b)";
+        return query;
+    }
+
     // Requete cypher pour créer un lien entre deux noeuds
     public static String createLink(String label1, String name1, String label2, String name2, String link, String string, String string2){
         String query = "MATCH (a:" + label1 + "),(b:" + label2 + ") WHERE a.name = '" + name1 + "' AND b.name = '" + name2 + "' CREATE (a)-[:" + link + "]->(b)";

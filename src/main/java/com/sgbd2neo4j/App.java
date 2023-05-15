@@ -12,10 +12,10 @@ import org.neo4j.driver.Config;
 public class App 
 {  
     //Aura queries use an encrypted connection using the "neo4j+s" protocol
-    final private static String url = "jdbc:mysql://localhost:3306/cinephile?user=root&password=";
-    final private static String uri = "neo4j+s://02187017.databases.neo4j.io";
+    final private static String url = "jdbc:mysql://localhost:3306/northwind?user=root&password=Hj11062000!!";
+    final private static String uri = "neo4j+s://43837302.databases.neo4j.io:7687";
     final private static String user = "neo4j";
-    final private static String password = "OhnI7joX34j4EPzZmMHljCE6js4UG82yHJy4j9y9K2E";
+    final private static String password = "zU5cPEHkdhQgHzlLx85OfqlbYBMbNyxv1XIDOfxmzxA";
     
     static private Database db;
     static private Connection DB;
@@ -39,11 +39,18 @@ public class App
              afficherRecuperationDonnees();
              
              // On traduit toutes les tables en noeuds puis on les migre vers Neo4J
-             // migrationTables(app);
+             //migrationTables(app);
+
+
              
              // On détermine les FK pour afin de définir les relations entre noeuds
-             definirRelation(app);
+             //definirRelation(app);
         }
+
+        ResultSet test = db.getForeignKey(DB, "products");
+        List <String> listColonnes = db.toList(test);
+
+        System.out.println(listColonnes);
        
         db.closeDB(DB);
     }

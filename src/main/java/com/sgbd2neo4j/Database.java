@@ -90,7 +90,7 @@ public class Database {
     }
 
     public ResultSet getForeignKey(Connection db, String table) throws SQLException{
-      String query = "SELECT COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' AND constraintname LIKE 'FK%'";
+      String query = "SELECT COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" + table + "' and constraint_name <> 'PRIMARY'";
       Statement stmt = db.createStatement();
       ResultSet rs = stmt.executeQuery(query);
       return rs;

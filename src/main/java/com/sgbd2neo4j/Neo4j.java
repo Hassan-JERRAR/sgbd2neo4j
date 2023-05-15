@@ -145,8 +145,8 @@ public class Neo4j implements AutoCloseable {
       int index = 0;
       for (String key : hm2.keySet()) {
         for(String attr : hm2.get(key)) {
-          valeurs[index] = 
-          index++;
+          //valeurs[index] = 
+          //index++;
         }
       }
       

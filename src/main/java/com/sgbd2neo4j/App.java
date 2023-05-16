@@ -79,17 +79,26 @@ public class App
                     app.executeCreateSingleLink(string, tableref.get(0),list2.get(i),columnref.get(0),list2.get(i)); }
 
                   
-                } /*else if (list2.size()>2){
-                  System.out.println("La table " + string + " a plusieurs FK : " + list2);
-                  for (int i = 0; i < list2.size(); i++) {
-                    ResultSet ref = db.getReferenceTableFk(DB, string, list2.get(i));
-                    List<String> tableref = db.toList(ref);
-                    ResultSet refcolumn = db.getReferenceColumnFk(DB, string, list2.get(i));
-                    List<String> columnref = db.toList(refcolumn);
-                    System.out.println("La table " + string + " a une FK : " + list2.get(i) + " qui référence la table " + tableref.get(0));
-                    app.executeCreateSingleLink(string, tableref.get(0),list2.get(i),columnref.get(0),list2.get(i)); }
+                } else if (list2.size()==2){
+                  ResultSet ref = db.getReferenceTableFk(DB, string, list2.get(0));
+                  List<String> tableref = db.toList(ref);
+                  System.out.println(tableref);
+                  ResultSet ref2 = db.getReferenceTableFk(DB, string, list2.get(1));
+                  List<String> tableref2 = db.toList(ref2);
+                  System.out.println(tableref2);
+                  ResultSet refcolumn = db.getReferenceColumnFk(DB, string, list2.get(0));
+                  List<String> columnref = db.toList(refcolumn);
+                  System.out.println(columnref);
+                  ResultSet refcolumn2 = db.getReferenceColumnFk(DB, string, list2.get(1));
+                  List<String> columnref2 = db.toList(refcolumn2);
+                  System.out.println(columnref2);
+                  if (tableref.get(1).equals(tableref2.get(1)))
+                  {  System.out.println("La table " + string + " a une FK : " + list2.get(0) + " qui référence la table " + tableref.get(0));
+                    System.out.println("La table " + string + " a une FK : " + list2.get(1) + " qui référence la table " + tableref2.get(0));
+                    app.executeCreateSingleLink(string, tableref.get(0),list2.get(0),columnref.get(0),list2.get(0));
+                    app.executeCreateSingleLink(string, tableref2.get(0),list2.get(1),columnref2.get(0),list2.get(1));}
 
-                }*/
+                }
                 
 
                     

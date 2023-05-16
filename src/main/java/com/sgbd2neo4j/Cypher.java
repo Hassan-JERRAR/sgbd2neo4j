@@ -38,7 +38,14 @@ public class Cypher {
         return query;
     }
     
-    // Requete cypher pour créer un noeud avec plusieurs propriétés
+    /**
+     * Retourne la requete de creation d'un noeud dans Neo4J
+     * @param label Label du projet
+     * @param nomsColonnes Liste des propriétés du noeud (d'abord les valeeurs string et ensuite les int)
+     * @param valeursString La liste des valeurs String
+     * @param valeursInt La liste des valeurs Int
+     * @return La requête complète de création d'un noeud
+     */
     public static String createNode(String label, List<String> nomsColonnes, String[] valeursString, Integer[] valeursInt){
         if(label.contains(" ")){
             label = label.replace(" ", "_");
@@ -73,7 +80,16 @@ public class Cypher {
 
 
 
-     // Requete cypher pour créer un lien entre deux noeuds
+    /**
+     * Retourne la requête pour crée un lien entre deux noeuds dont une propriété est égale
+     * @param label1 Label du noeud source de la relation
+     * @param label2 Label du noeud destination de la relation
+     * @param fk1 Nom de la propriété du noeud source (qui est FK dans le modèle relationnel)
+     * @param fk2 Nom de la propriété du noeud destinataire (qui est référencé)
+     * @param link Nom de la relation
+     *
+     * @return La requête complète de création d'une relation dont les noeuds possèdent une valeur de propriété égales
+     */
      public static String createSingleLink(String label1, String label2, String fk1,  String fk2, String link){
         String query = "MATCH (a:" + label1 + "),(b:" + label2 + ") WHERE a."+fk1+" = b."+fk2+"  CREATE (a)-[:" + link + "]->(b)";
         System.out.println(query);
@@ -101,7 +117,28 @@ public class Cypher {
     
     
     
-    // Requete cypher pour créer un lien entre deux noeuds
+    /**
+     * Retourne la requête pour crée un lien entre deux noeuds.
+     *
+     * Les noeuds sont identifiés par les valeurs de leurs propriétés.
+     * La relation peut posséder un nombre quelconque de propriétés.
+     * 
+     * Les valeurs sont toutes des String.
+     * Il faut fournir les valeurs dans le même ordre que les attributs qui
+     * y correspondent.
+     * 
+     * 
+     * @param label1 Label du noeud source
+     * @param attributs1 Liste des propriétés pour identifié le noeud source
+     * @param valeurs1 Liste des valeurs pour identifié le noeud source
+     * @param label2 Label du noeud destinataire
+     * @param attributs2 Liste des propriétés pour identifié le noeud destinataire
+     * @param valeurs2 Liste des valeurs pour identifier le noeud destinataire
+     * @param relation Nom de la relation
+     * @param attributs3 Liste des propriétés de la relation
+     * @param valeurs3 Liste des valeurs à assigner aux propriétés de la relation.
+     * @return
+     */
     public static String createLink(String label1,   ArrayList<String> attributs1, ArrayList<String> valeurs1, 
                                     String label2,   ArrayList<String> attributs2, ArrayList<String> valeurs2,
                                     String relation, ArrayList<String> attributs3, ArrayList<String> valeurs3){
